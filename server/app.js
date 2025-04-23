@@ -6,7 +6,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 // Configure CORS to allow requests from any origin
 app.use(cors({
-    origin: '*', // Allow all origins
+    origin: ['https://stripe-tut-frontend.vercel.app', 'http://localhost:3000'],
     methods: ['GET', 'POST'], // Allow these methods
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
