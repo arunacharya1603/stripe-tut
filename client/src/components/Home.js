@@ -9,10 +9,7 @@ import toast from 'react-hot-toast';
 
 
 const Home = () => {
-    const [cartData, setCartData] = useState(CardsData);
     const dispatch = useDispatch();
-
-
     // add to cart 
     const send = (e)=>{
         dispatch(addToCart(e))
@@ -24,7 +21,7 @@ const Home = () => {
                 <h2 className='px-4' style={{ fontWeight: 400 }}>Restaurants in Ahmedabad Open now</h2>
                 <div className='row mt-2 d-flex justify-content-around align-items-center'>
                     {
-                        cartData.map((element, index) => {
+                        CardsData.map((element, index) => {
                             return (
                                 <>
                                     <Card style={{ width: "22rem", border: "none" }} className='hove mb-4'>
