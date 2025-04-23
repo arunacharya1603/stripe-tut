@@ -4,13 +4,19 @@ const app = express();
 const cors = require("cors");
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
+// Configure CORS to allow requests from any origin
+app.use(cors({
+    origin: '*', // Allow all origins
+    methods: ['GET', 'POST'], // Allow these methods
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
 app.use(express.json());
-app.use(cors());
 
 // checkout api
 app.post("/api/create-checkout-session",async(req,res)=>{
     const {products} = req.body;
-
 
     const lineItems = products.map((product)=>({
         price_data:{
