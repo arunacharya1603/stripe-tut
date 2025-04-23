@@ -9,16 +9,12 @@ const allowedOrigins = ['https://stripe-tut-frontend.vercel.app', 'http://localh
 
 // CORS configuration
 const corsOptions = {
-    origin: function (origin, callback) {
-        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204
 };
 
 // Apply CORS middleware globally
@@ -37,12 +33,6 @@ app.get('/health', (req, res) => {
 
 // Checkout API endpoint
 app.post("/api/create-checkout-session", async(req, res) => {
-    // Set CORS headers explicitly for this route as a backup
-    res.header("Access-Control-Allow-Origin", allowedOrigins.includes(req.headers.origin) ? req.headers.origin : allowedOrigins[0]);
-    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.header("Access-Control-Allow-Credentials", "true");
-    
     try {
         const {products} = req.body;
 

@@ -86,7 +86,8 @@ const CartDetails = () => {
                 method: "POST",
                 headers: headers,
                 body: JSON.stringify(body),
-                credentials: 'include', // Include cookies if needed
+                credentials: 'include',
+                mode: 'cors'
             });
 
             if (!response.ok) {
