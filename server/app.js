@@ -4,24 +4,16 @@ const app = express();
 const cors = require("cors");
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
-// Allowed origins
-const allowedOrigins = ['https://stripe-tut-frontend.vercel.app', 'http://localhost:3000'];
-
-// CORS configuration
+// Simplified CORS configuration
 const corsOptions = {
-    origin: allowedOrigins,
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: true, // Allow all origins (temporarily for testing)
     credentials: true,
-    preflightContinue: false,
-    optionsSuccessStatus: 204
+    optionsSuccessStatus: 200
 };
 
-// Apply CORS middleware globally
+// Apply CORS middleware first
 app.use(cors(corsOptions));
-
-// Handle OPTIONS preflight requests explicitly
-app.options('*', cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle ALL OPTIONS requests
 
 // Parse JSON bodies
 app.use(express.json());

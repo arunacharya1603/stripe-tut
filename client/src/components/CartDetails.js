@@ -87,7 +87,8 @@ const CartDetails = () => {
                 headers: headers,
                 body: JSON.stringify(body),
                 credentials: 'include',
-                mode: 'cors'
+                mode: 'cors',
+                redirect: 'follow'
             });
 
             if (!response.ok) {
