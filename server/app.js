@@ -5,17 +5,17 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 // CORS middleware - manually implemented
 app.use((req, res, next) => {
-    // Set CORS headers regardless of request type
+    console.log(`Request Method: ${req.method}, URL: ${req.url}`);
     res.setHeader('Access-Control-Allow-Origin', 'https://stripe-tut-frontend.vercel.app');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
-    
-    // Handle OPTIONS requests explicitly with 200 status
+
     if (req.method === 'OPTIONS') {
+        console.log('Handling OPTIONS request');
         return res.status(200).end();
     }
-    
+
     next();
 });
 
