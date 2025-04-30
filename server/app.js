@@ -4,41 +4,16 @@ const app = express();
 const cors = require("cors");
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
-// Explicit CORS configuration for Vercel
-const allowedOrigins = [
-  'https://stripe-tut-frontend.vercel.app',
-  'http://localhost:3000',  // For local development
-  // Add any other origins you need
-];
+// Simplified CORS configuration
+const corsOptions = {
+    origin: true, // Allow all origins (temporarily for testing)
+    credentials: true,
+    optionsSuccessStatus: 200
+};
 
-// Configure CORS middleware
-app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(null, false);
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
-}));
-
-// Ensure OPTIONS requests work properly (preflight)
-app.options('*', (req, res) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  }
-  res.status(200).end();
-});
+// Apply CORS middleware first
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle ALL OPTIONS requests
 
 // Parse JSON bodies
 app.use(express.json());
