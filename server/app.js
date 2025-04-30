@@ -1,19 +1,28 @@
+// app.js
 require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
-// Simplified CORS configuration
-const corsOptions = {
-    origin: true, // Allow all origins (temporarily for testing)
-    credentials: true,
-    optionsSuccessStatus: 200
-};
+// CRITICAL: Handle OPTIONS requests directly with Express
+// This must be before any other middleware
+app.options('*', (req, res) => {
+    res.header('Access-Control-Allow-Origin', 'https://stripe-tut-frontend.vercel.app');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.status(200).send();
+});
 
-// Apply CORS middleware first
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Handle ALL OPTIONS requests
+// Basic CORS for non-OPTIONS requests
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://stripe-tut-frontend.vercel.app');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+});
 
 // Parse JSON bodies
 app.use(express.json());
