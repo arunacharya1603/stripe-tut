@@ -1,26 +1,21 @@
-// app.js
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const cors = require("cors");
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
-// CRITICAL: Handle OPTIONS requests directly with Express
-// This must be before any other middleware
-app.options('*', (req, res) => {
-    res.header('Access-Control-Allow-Origin', 'https://stripe-tut-frontend.vercel.app');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.status(200).send();
-});
-
-// Basic CORS for non-OPTIONS requests
+// CORS middleware - manually implemented
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://stripe-tut-frontend.vercel.app');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-    res.header('Access-Control-Allow-Credentials', 'true');
+    // Set CORS headers regardless of request type
+    res.setHeader('Access-Control-Allow-Origin', 'https://stripe-tut-frontend.vercel.app');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    
+    // Handle OPTIONS requests explicitly with 200 status
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    
     next();
 });
 
